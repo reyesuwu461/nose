@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pandemoniun Crusader</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="img/calavera-y-huesos.png">
+</head>
+<body>
+    <!-- Main Game Container -->
+    <div id="game-container">
+        <!-- Animated Background -->
+        <div id="background-bats"></div>
+        
+        <!-- Pause Button and Pause Menu -->
+<button id="pause-btn">II</button>
+
+<!-- Pause Menu -->
+<div id="pause-menu" style="display:none;">
+    <h1>Game Paused</h1>
+    <button id="continue-btn">Continue</button>
+    <button id="retry-pause-btn">Retry Level</button>
+    <button id="exit-pause-btn">Main Menu</button>
+</div>
+
+        <!-- Controls Panel -->
+        <div id="controls-container">
+            <button id="toggle-controls">Show Controls</button>
+            <div id="instructions">
+                <h3>Controls</h3>
+                <ul>
+                    <li>← → : Move</li>
+                    <li>↑/Space: Jump</li>
+                    <li>Double ↑/Space: Double jump</li>
+                    <li>↓: Crouch</li>
+                    <li>ESC: Pause</li>
+                    <li>F key to shoot</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Decorative Elements -->
+        <div id="moon"></div>
+        <div id="stars-container"></div>
+        <div id="player"></div>
+        <!-- Shield will be added dynamically -->
+        <div id="fire-power" class="power-up"></div>
+        <div id="fireballs-container"></div>
+        
+        <!-- Game State Screens -->
+        <div id="game-over">
+            <h1>GAME OVER</h1>
+            <div>
+                <button id="retry-btn">Try Again</button>
+                <button id="exit-btn">Main Menu</button>
+            </div>
+        </div>
+        
+        <div id="level-complete">
+            <h1>LEVEL COMPLETE!</h1>
+            <button id="next-level-btn">Next Level</button>
+        </div>
+        
+        <div id="game-complete">
+            <h1>YOU WIN!</h1>
+            <p>Congratulations Champion!</p>
+            <button id="restart-game-btn">Play Again</button>
+        </div>
+        
+        <div id="level-select">
+            <h2>Select Level</h2>
+            <button class="level-btn" data-level="1">Level 1 - Easy</button>
+            <button class="level-btn" data-level="2">Level 2 - Medium</button>
+            <button class="level-btn" data-level="3">Level 3 - Hard</button>
+        </div>
+    </div>
+
+    <!-- Flying Bats Animation (decorative, not part of main game logic) -->
+    <div id='bat1' style='position:absolute; z-index:80; left: -500px; width:125px; height:108px;'>
+        <img border='0' src='https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhZ6O2m5K_MsVn1cN3mWLnspQX8by-wXbUuo2WS0hCHJ9BsvJaINTRP_kd5u9dfFOCz0UMkEcVHgCwtzbN09AR91bWGhdbEKzu1gbpKtvFk5ldQtYjGmhYm4RGQWiJ8jVq-oekQihl6_QQ/s125/murcielago1.gif'/>
+    </div>
+    <div id='bat2' style='position:absolute; z-index:81; left: -600px; width:120px; height:99px;'>
+        <img border='0' src='https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjNS-jSPEG9gWW9FGFQMfcHHvZqxBpmTNqtyRUzQWWu0rWTaDPopPBqcLDq_gwfp7ETbpxGfOUoFlNYW0LyOzW_UByJUGjja83T_0BbROXWLIrWcK3pGanej-6NCv5BXRcVqkpYjRSVR2w/s120/murcielago2.gif'/>
+    </div>
+    <div id='bat3' style='position:absolute; z-index:82; left: -700px; width:160px; height:120px;'>
+        <img border='0' src='https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEguHOnLeG6ild1BjyaDHocWxqJL53U2OuIA8xSvxuuXUh8yC9DbGbhGXH95hd6mhwD31DHkmiKUQb04svBNohqaN98xwIr82DW1U3XUy_2SwlnYSfAaXPYbZnVC4-PjQYZrz4oJ3sHy4N8/s160/murcielago3.gif'/>
+    </div>
+    <div id='bat4' style='position:absolute; z-index:83; left: -800px; width:106px; height:85px;'>
+        <img border='0' src='https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgz7JeUaNBsZ-hDxD05ojjTsuZafZ_WEtJw5PoYeypnTPdqH4d1frGsOFJkxlLYO3AjvSf0q0liQDYmnRkkTBKicjpgoY2BZk0KgcM0vFM72ElGM9GjBrCjbTldGrH-vRjKrKW4kFjBSHs/s106/murcielago4.gif'/>
+    </div>
+
+    <!-- Flying Bats Script (decorative) -->
+    <script type='text/javascript'>
+    // Flying bats animation script
+    var vmin=2;
+    var vmax=5;
+    var vr=2;
+    var timer1;
+
+    function iecompattest(){
+        return (document.compatMode && document.compatMode!="BackCompat")? document.documentElement : document.body
+    }
+
+    function Chip(chipname,width,height){
+        this.named=chipname;
+        this.vx=vmin+vmax*Math.random();
+        this.vy=vmin+vmax*Math.random();
+        this.w=width+20;
+        this.h=height;
+        this.xx=0;
+        this.yy=0;
+        this.timer1=null;
+    }
+
+    function movechip(chipname){
+        if (document.getElementById){
+            eval("chip="+chipname);
+            if (window.innerWidth || window.opera){
+                pageX=window.pageXOffset;
+                pageW=window.innerWidth-40;
+                pageY=window.pageYOffset;
+                pageH=window.innerHeight-20;
+            }
+            else if (document.body){
+                pageX=iecompattest().scrollLeft;
+                pageW=iecompattest().offsetWidth-40;
+                pageY=iecompattest().scrollTop;
+                pageH=iecompattest().offsetHeight-20;
+            }
+
+            chip.xx=chip.xx+chip.vx;
+            chip.yy=chip.yy+chip.vy;
+            chip.vx+=vr*(Math.random()-0.5);
+            chip.vy+=vr*(Math.random()-0.5);
+            if(chip.vx>(vmax+vmin)) chip.vx=(vmax+vmin)*2-chip.vx;
+            if(chip.vx<(-vmax-vmin)) chip.vx=(-vmax-vmin)*2-chip.vx;
+
+            if(chip.vy>(vmax+vmin)) chip.vy=(vmax+vmin)*2-chip.vy;
+            if(chip.vy<(-vmax-vmin)) chip.vy=(-vmax-vmin)*2-chip.vy;
+            if(chip.xx<=pageX){
+                chip.xx=pageX;
+                chip.vx=vmin+vmax*Math.random();
+            }
+            if(chip.xx>=pageX+pageW-chip.w){
+                chip.xx=pageX+pageW-chip.w;
+                chip.vx=-vmin-vmax*Math.random();
+            }
+            if(chip.yy<=pageY){
+                chip.yy=pageY;
+                chip.vy=vmin+vmax*Math.random();
+            }
+            if(chip.yy>=pageY+pageH-chip.h){
+                chip.yy=pageY+pageH-chip.h;
+                chip.vy=-vmin-vmax*Math.random();
+            }
+
+            document.getElementById(chip.named).style.left=chip.xx+"px";
+            document.getElementById(chip.named).style.top=chip.yy+"px";
+
+            chip.timer1=setTimeout("movechip('"+chip.named+"')",100);
+        }
+    }
+
+    function pagestart(){
+        bat1=new Chip("bat1",147,168);
+        bat2=new Chip("bat2",47,68);
+        bat3=new Chip("bat3",47,68);
+        bat4=new Chip("bat4",47,68);
+
+        movechip("bat1");
+        movechip("bat2");
+        movechip("bat3");
+        movechip("bat4");
+    }
+
+    if (window.addEventListener)
+        window.addEventListener("load", pagestart, false)
+    else if (window.attachEvent)
+        window.attachEvent("onload", pagestart)
+    else if (document.getElementById)
+        window.onload=pagestart
+    </script>
+
+    <!-- Main Game Script -->
+    <script src="main.js"></script>
+    <!-- Agrega esto al final del body, antes de los scripts -->
+<script>
+  // Si está dentro de un iframe, ajusta el estilo del body
+  if (window.parent !== window) {
+    document.body.style.margin = '0';
+    document.body.style.padding = '0';
+    document.body.style.overflow = 'hidden';
+    document.getElementById('game-container').style.margin = '0';
+    document.getElementById('game-container').style.height = '100vh';
+    document.getElementById('game-container').style.width = '100vw';
+    document.getElementById('game-container').style.border = 'none';
+  }
+</script>
+</body>
+</html>

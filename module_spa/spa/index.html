@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Content Management System</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="light-mode">
+  <!-- Login overlay -->
+  <div id="login-overlay" class="login-overlay">
+    <div class="login-container">
+      <img src="img/AFK_Arena_logo.png" alt="AFK Arena Logo" class="logo">
+      <form id="loginForm" class="login-form">
+        <div class="form-row">
+          <label for="uid">UID</label>
+          <input type="text" id="uid" placeholder="Enter your UID">
+        </div>
+        <div class="form-row">
+          <label for="code">Verification Code</label>
+          <input type="text" id="code" placeholder="Enter verification code" maxlength="6" pattern="\d{6}">
+        </div>
+        <div class="role-selector">
+          <button type="button" class="role-option active" data-role="user">
+            <i class="fas fa-user"></i> User
+          </button>
+          <button type="button" class="role-option" data-role="seller">
+            <i class="fas fa-store"></i> Seller
+          </button>
+          <button type="button" class="role-option" data-role="admin">
+            <i class="fas fa-shield-alt"></i> Admin
+          </button>
+        </div>
+        <div class="login-footer">
+          <button type="submit" class="login-btn">
+            <i class="fas fa-sign-in-alt"></i> Login
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Main app content -->
+  <div id="app-content" style="display: none;">
+    <header>
+      <h1 id="app-title">Content Management System</h1>
+      <div class="user-controls">
+        <span id="user-role-display" class="user-role"></span>
+        <button id="logout-btn" class="logout-btn">Logout</button>
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+          <span class="theme-icon">🌙</span>
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <div id="role-content"></div>
+    </main>
+  </div>
+
+  <!-- Game overlay -->
+  <div id="game-overlay" class="game-overlay" style="display: none;">
+    <div class="game-container">
+      <div class="game-header">
+        <h3>🎮 Pandemonium Crusader</h3>
+        <button class="close-game-btn" id="close-game-btn" title="Close game">✖</button>
+      </div>
+      <div class="game-content">
+        <iframe id="game-iframe" src="game/game.html" class="game-iframe"></iframe>
+        <div id="game-error" class="game-error" style="display: none;">
+          <h4>⚠️ Error loading game</h4>
+          <p>Could not find the game file.</p>
+          <button id="retry-game-btn" class="retry-btn">Retry</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Game button (only for users) -->
+  <div id="game-icon-container" style="display: none;">
+    <button id="game-icon" class="game-icon" title="Play">☠️</button>
+  </div>
+
+  <script src="auth.js"></script>
+  <script src="theme.js"></script>
+  <script src="storageManager.js"></script>
+  <script src="contentManager.js"></script>
+  <script src="game.js"></script>
+  <script src="adminModule.js"></script>
+  <script src="sellerModule.js"></script>
+  <script src="userModule.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
