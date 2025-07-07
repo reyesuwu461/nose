@@ -1,83 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 </head>
 <body>
-    <!-- Login Overlay -->
-    <div id="login-overlay" class="login-wrapper">
-        <div class="login-container">
-            <img src="img/AFK_Arena_logo.png" alt="AFK Arena Logo" class="logo">
-            
-            <div class="role-selector">
-                <button type="button" class="role-option active" data-role="user">
-                    <i class="fas fa-user"></i> User
-                </button>
-                <button type="button" class="role-option" data-role="seller">
-                    <i class="fas fa-store"></i> Seller
-                </button>
-                <button type="button" class="role-option" data-role="admin">
-                    <i class="fas fa-shield-alt"></i> Admin
-                </button>
-            </div>
+  <div class="login-container">
+    <form id="loginForm">
+      <h2>Login</h2>
+      <div class="form-group">
+        <label for="username">Username:</label>
+        <input type="text" id="username" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="password" id="password" required>
+      </div>
+      <button type="submit">Login</button>
+    </form>
+  </div>
 
-            <form id="loginForm" class="login-form">
-                <div class="form-row">
-                    <label for="uid">UID</label>
-                    <input type="text" id="uid" placeholder="Enter your UID" required>
-                </div>
-
-                <div class="form-row">
-                    <label for="code">Verification Code</label>
-                    <input type="password" id="code" placeholder="Enter verification code" maxlength="6" pattern="\d{6}" required>
-                </div>
-
-                <div class="login-footer">
-                    <button type="submit" class="login-btn">
-                        <i class="fas fa-sign-in-alt"></i> Login
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- App Content (hidden by default) -->
-    <div id="app-content" style="display: none;">
-        <header>
-            <div class="header-container">
-                <div id="game-icon-container">
-                    <img src="img/AFK_Arena_logo.png" alt="Game Icon" class="game-icon">
-                </div>
-                <h1 id="app-title">Dashboard</h1>
-                <div class="user-info">
-                    <span id="user-role-display" class="user-role"></span>
-                    <button id="logout-btn" class="logout-btn">
-                        <i class="fas fa-sign-out-alt"></i> Logout
-                    </button>
-                </div>
-            </div>
-        </header>
-        
-        <main>
-            <div id="role-module-container">
-                <!-- Role-specific content will be loaded here -->
-                <div class="welcome-message">
-                    <h2>Welcome to your dashboard</h2>
-                    <p id="role-specific-message"></p>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <!-- Include role modules -->
-    <script src="user-module.js"></script>
-    <script src="seller-module.js"></script>
-    <script src="admin-module.js"></script>
+  <script type="module">
+    import Auth from './auth.js';
     
-    <script src="auth.js"></script>
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      
+      if (await Auth.login(username, password)) {
+        alert('Login successful!');
+      } else {
+        alert('Invalid credentials');
+      }
+    });
+  </script>
 </body>
 </html>
