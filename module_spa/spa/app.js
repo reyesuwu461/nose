@@ -1,37 +1,36 @@
-// Main Application Coordinator
-const App = (function() {
-  function init() {
-    // Initialize all systems
-    Auth.init();
-    Theme.init();
-    Game.init();
+import Auth from './auth.js';
+import { AdminModule } from './adminModule.js';
+import { SellerModule } from './sellerModule.js';
+import { UserModule } from './userModule.js';
+
+document.addEventListener('DOMContentLoaded', () => {
+  Auth.init();
+  
+  // Router simple para SPA
+  const route = () => {
+    const hash = window.location.hash.substring(1);
+    const contentDiv = document.getElementById('main-content');
     
-    // Load additional modules if needed
-    if (Auth.getCurrentUser()) {
-      loadRoleSpecificModules();
+    if (!Auth.currentUser) {
+      window.location.href = '../login.html';
+      return;
     }
-  }
 
-  function loadRoleSpecificModules() {
-    const currentUser = Auth.getCurrentUser();
-    if (!currentUser) return;
-
-    const container = document.getElementById('role-content');
-    switch(currentUser.role) {
+    switch(hash) {
       case 'admin':
-        if (typeof AdminModule !== 'undefined') AdminModule.init(container);
+        AdminModule.init(contentDiv);
         break;
       case 'seller':
-        if (typeof SellerModule !== 'undefined') SellerModule.init(container);
+        SellerModule.init(contentDiv);
         break;
       case 'user':
-        if (typeof UserModule !== 'undefined') UserModule.init(container);
+        UserModule.init(contentDiv);
         break;
+      default:
+        contentDiv.innerHTML = '<h2>Welcome to the Dashboard</h2>';
     }
-  }
+  };
 
-  return { init };
-})();
-
-// Start the application
-document.addEventListener('DOMContentLoaded', App.init);
+  window.addEventListener('hashchange', route);
+  route();
+});
