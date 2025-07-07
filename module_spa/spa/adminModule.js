@@ -1,24 +1,20 @@
-function showUserManagement() {
-  document.getElementById('admin-content-container').innerHTML = `
-    <div class="admin-panel">
-      <h3>User Management</h3>
-      <button id="delete-user-btn" class="danger-btn">Delete User</button>
-      <select id="user-role-select">
-        <option value="user">User</option>
-        <option value="seller">Seller</option>
-        <option value="admin">Admin</option>
-      </select>
-    </div>
-  `;
-}
-
-function showSystemSettings() {
-  document.getElementById('admin-content-container').innerHTML = `
-    <div class="admin-panel">
-      <h3>System Settings</h3>
-      <label>Maintenance Mode: 
-        <input type="checkbox" id="maintenance-mode">
-      </label>
-    </div>
-  `;
-}
+export const AdminModule = {
+  init(container) {
+    container.innerHTML = `
+      <div class="admin-dashboard">
+        <h2>Admin Dashboard</h2>
+        <div class="admin-actions">
+          <button id="manageProducts">Manage Products</button>
+          <button id="manageUsers">Manage Users</button>
+          <button id="viewReports">View Reports</button>
+        </div>
+        <div id="adminContent"></div>
+      </div>
+    `;
+    
+    // Implementar funcionalidades específicas
+    document.getElementById('manageProducts').addEventListener('click', () => {
+      document.getElementById('adminContent').innerHTML = '<p>Product management panel</p>';
+    });
+  }
+};
